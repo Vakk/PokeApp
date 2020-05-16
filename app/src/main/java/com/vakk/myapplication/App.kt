@@ -10,7 +10,7 @@ class App : BaseDaggerApplication() {
         DaggerAppComponent
             .factory()
             .create(this).apply {
-                (this)
+                inject(this@App)
             }
     }
 }
