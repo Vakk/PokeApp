@@ -1,6 +1,7 @@
 package com.vakk.myapplication.di
 
 import com.vakk.myapplication.MainActivity
+import com.vakk.myapplication.di.session.SessionModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

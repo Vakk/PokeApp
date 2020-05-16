@@ -7,6 +7,8 @@ apply from: "$rootProject.projectDir/gradle/coroutines.gradle"
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    api project(path: ':common')
+    api project(path: ':domain')
     api project(path: ':starter')
 
     api "com.squareup.retrofit2:converter-jackson:$retrofit_version"
