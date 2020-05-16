@@ -1,6 +1,6 @@
 package com.vakk.core
 
-interface AppConfig {
+interface ApiConfig {
 
     val urlModel: UrlModel
 
@@ -9,6 +9,6 @@ interface AppConfig {
     }
 
     companion object {
-        lateinit var instance: AppConfig
+        lateinit var instance: ApiConfig
     }
 }

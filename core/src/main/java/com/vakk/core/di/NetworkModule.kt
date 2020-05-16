@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.vakk.core.AppConfig
+import com.vakk.core.ApiConfig
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -21,7 +21,7 @@ class NetworkModule {
     @Singleton
     fun provideRetrofit(builder: Retrofit.Builder): Retrofit {
         return builder
-            .baseUrl(AppConfig.instance.urlModel.baseApi + "/")
+            .baseUrl(ApiConfig.instance.urlModel.baseApi + "/")
             .build()
     }
 
