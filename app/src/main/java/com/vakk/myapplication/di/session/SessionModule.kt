@@ -3,7 +3,7 @@ package com.vakk.myapplication.di.session
 import com.vakk.core.usecase.GetPokemonsUseCaseImpl
 import com.vakk.domain.usecase.GetPokemonsUseCase
 import com.vakk.starter.di.mvvm.ViewModelModule
-import dagger.BindsInstance
+import dagger.Binds
 import dagger.Module
 
 /**
@@ -14,7 +14,7 @@ class SessionModule {
 
     @Module
     abstract class UseCasesModule {
-        @BindsInstance
+        @Binds
         abstract fun getPokemonsUseCase(userCase: GetPokemonsUseCaseImpl): GetPokemonsUseCase
     }
 }

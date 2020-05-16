@@ -9,6 +9,15 @@ import javax.inject.Inject
 class GetPokemonsUseCaseImpl @Inject constructor() : GetPokemonsUseCase {
     override suspend fun invoke(skip: Int, take: Int): List<Pokemon> =
         withContext(Dispatchers.Default) {
-            listOf()
+            listOf(
+                Pokemon(
+                    "Pokemon 1",
+                    "https://assets.pokemon.com/assets/cms2/img/pokedex/full/046.png"
+                ),
+                Pokemon(
+                    "Pokemon 2",
+                    "https://assets.pokemon.com/assets/cms2/img/pokedex/full/835.png"
+                )
+            )
         }
 }
