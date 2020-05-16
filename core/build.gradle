@@ -2,9 +2,13 @@ apply plugin: 'com.android.library'
 
 apply from: "$rootProject.projectDir/gradle/poke_app.gradle"
 apply from: "$rootProject.projectDir/gradle/dagger.gradle"
+apply from: "$rootProject.projectDir/gradle/coroutines.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     api project(path: ':starter')
+
+    api "com.squareup.retrofit2:converter-jackson:$retrofit_version"
+    api "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
 }
