@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 apply from: "$rootProject.projectDir/gradle/poke_app.gradle"
+apply from: "$rootProject.projectDir/gradle/dagger.gradle"
 
 android {
     defaultConfig {
@@ -14,7 +15,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(path: ':core')
-    implementation project(path: ':starter')
 
     implementation "androidx.appcompat:appcompat:$appCompat_version"
     implementation "androidx.core:core-ktx:$coreKtx_version"
