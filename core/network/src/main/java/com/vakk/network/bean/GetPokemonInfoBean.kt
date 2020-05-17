@@ -8,6 +8,7 @@ data class GetPokemonInfoBean(
     @JsonProperty("forms") val forms: List<ProtoInfoBean>,
     @JsonProperty("game_indices") val gameIndices: List<GameIndex>,
     @JsonProperty("height") val height: Int,
+    @JsonProperty("held_items") val heldItems: List<ProtoInfoBean>,
     @JsonProperty("id") val id: Long,
     @JsonProperty("is_default") val isDefault: Boolean,
     @JsonProperty("location_area_encounters") val locationAreaEncounters: String,
@@ -33,11 +34,12 @@ data class GetPokemonInfoBean(
 
     data class Move(
         @JsonProperty("move") val move: ProtoInfoBean,
-        @JsonProperty("version_group_details") val versionGroupDetails: VersionGroupDetails
+        @JsonProperty("version_group_details") val versionGroupDetails: List<VersionGroupDetails>
     ) {
         data class VersionGroupDetails(
             @JsonProperty("level_learned_at") val levelLearnedAt: Int,
-            @JsonProperty("move_learn_method") val moveLearnMethod: ProtoInfoBean
+            @JsonProperty("move_learn_method") val moveLearnMethod: ProtoInfoBean,
+            @JsonProperty("version_group") val versionGroup: ProtoInfoBean
         )
     }
 
