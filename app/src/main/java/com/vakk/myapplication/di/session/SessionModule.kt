@@ -26,7 +26,8 @@ import retrofit2.Retrofit
     includes = [
         SessionModule.UseCasesModule::class,
         SessionModule.ViewModelModule::class,
-        SessionModule.NetworkModule::class
+        SessionModule.NetworkModule::class,
+        SessionModule.RepositoryModule::class
     ]
 )
 abstract class SessionModule {

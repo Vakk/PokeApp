@@ -1,6 +1,7 @@
 package com.vakk.myapplication
 
 import android.app.Application
+import com.vakk.core.ApiConfig
 import com.vakk.myapplication.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -16,6 +17,8 @@ class App : Application(), HasAndroidInjector {
 
     override fun onCreate() {
         super.onCreate()
+        ApiConfig.instance = ApiConfigImpl()
+
         DaggerAppComponent
             .factory()
             .create(this)

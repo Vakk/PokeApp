@@ -1,6 +1,7 @@
 package com.vakk.core.repository
 
 import com.vakk.domain.entity.Pokemon
+import com.vakk.network.common.extensions.getResultOrThrowError
 import com.vakk.network.datasource.PokeApiDatasource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
@@ -20,10 +21,10 @@ class PokemonsRepositoryImpl(
             val bean = datasource.getPokemonsProtoList(
                 limit = take,
                 offset = skip
-            )
+            ).getResultOrThrowError()
             val pokemons = bean.results.map { async { datasource.getPokemonProto(it.url) } }
             pokemons.map {
-                val bean = it.await()
+                val bean = it.await().getResultOrThrowError()
                 Pokemon(
                     bean.name,
                     bean.sprites.frontDefault ?: ""
