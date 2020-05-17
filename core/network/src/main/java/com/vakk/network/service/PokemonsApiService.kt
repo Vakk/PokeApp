@@ -11,10 +11,10 @@ interface PokemonsApiService {
     fun getPokemonsProtoList(
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
-    ): List<GetPokemonsBean>
+    ): GetPokemonsBean
 
     @GET
-    fun getPokemonsProtoList(
+    fun getPokemonProto(
         @Url pokemonInfoUrl: String
-    ): List<GetPokemonInfoBean>
+    ): GetPokemonInfoBean
 }
