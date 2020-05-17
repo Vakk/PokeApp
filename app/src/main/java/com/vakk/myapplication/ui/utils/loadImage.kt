@@ -6,7 +6,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 
 fun ImageView.loadImage(imageUri: String?) {
-    Glide.with(this.context)
+    Glide.with(context)
         .load(imageUri)
         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
         .apply(RequestOptions.centerCropTransform())

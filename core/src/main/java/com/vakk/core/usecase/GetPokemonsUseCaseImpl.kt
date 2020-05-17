@@ -15,6 +15,26 @@ class GetPokemonsUseCaseImpl @Inject constructor() : GetPokemonsUseCase {
                     "https://assets.pokemon.com/assets/cms2/img/pokedex/full/046.png"
                 ),
                 Pokemon(
+                    "Pokemon 1",
+                    "https://assets.pokemon.com/assets/cms2/img/pokedex/full/046.png"
+                ),
+                Pokemon(
+                    "Pokemon 1",
+                    "https://assets.pokemon.com/assets/cms2/img/pokedex/full/046.png"
+                ),
+                Pokemon(
+                    "Pokemon 1",
+                    "https://assets.pokemon.com/assets/cms2/img/pokedex/full/046.png"
+                ),
+                Pokemon(
+                    "Pokemon 1",
+                    "https://assets.pokemon.com/assets/cms2/img/pokedex/full/046.png"
+                ),
+                Pokemon(
+                    "Pokemon 1",
+                    "https://assets.pokemon.com/assets/cms2/img/pokedex/full/046.png"
+                ),
+                Pokemon(
                     "Pokemon 2",
                     "https://assets.pokemon.com/assets/cms2/img/pokedex/full/835.png"
                 )

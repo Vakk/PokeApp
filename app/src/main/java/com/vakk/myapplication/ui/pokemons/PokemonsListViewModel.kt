@@ -14,8 +14,7 @@ import javax.inject.Inject
 class PokemonsListViewModel @Inject constructor(
     context: Context,
     val getPokemonsUseCase: GetPokemonsUseCase
-) :
-    AndroidViewModel(context.applicationContext.cast()),
+) : AndroidViewModel(context.applicationContext.cast()),
     PaginationCallback {
 
     val onPokemonsLoaded = MutableLiveData<List<Pokemon>>()
@@ -27,6 +26,10 @@ class PokemonsListViewModel @Inject constructor(
     override var itemsPerPage: Int = 20
 
     val items = listOf<Pokemon>()
+
+    init {
+        loadMoreItems()
+    }
 
     override fun loadMoreItems() {
         isPaginationInProcess = true
