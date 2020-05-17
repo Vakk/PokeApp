@@ -2,15 +2,17 @@ package com.vakk.starter.utils
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.vakk.common.safeCast
 import java.lang.ref.WeakReference
 
 /**
  * Use this scroll listener with LinearLayoutManager.
  */
 class PaginationScrollListener(
-        paginationCallback: PaginationCallback,
-        val pagesThreshold: Int = LOAD_MORE_PAGES_TRESHOLD,
-        val visibleItemsPerPageMultiplier: Int = VISIBLE_ITEMS_PER_PAGE_MULTIPLIER
+    paginationCallback: PaginationCallback,
+    val pagesThreshold: Int = LOAD_MORE_PAGES_TRESHOLD,
+    val visibleItemsPerPageMultiplier: Int = VISIBLE_ITEMS_PER_PAGE_MULTIPLIER
 ) : RecyclerView.OnScrollListener() {
 
     companion object {
@@ -25,16 +27,20 @@ class PaginationScrollListener(
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         val callback = callback ?: return
-        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+        val layoutManager = recyclerView.layoutManager!!
         val visibleItemCount = layoutManager.childCount
         val totalItemCount = layoutManager.itemCount
-        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
+        val firstVisibleItemPosition = layoutManager.safeCast<LinearLayoutManager>()?.let {
+            it.findFirstVisibleItemPosition()
+        } ?: layoutManager.safeCast<StaggeredGridLayoutManager>()?.let {
+            it.findLastVisibleItemPositions(null).last()
+        } ?: return //TODO: something went wrong for this case implement action.
         if (callback.itemsPerPage < visibleItemCount * visibleItemsPerPageMultiplier) {
             callback.itemsPerPage = visibleItemCount * visibleItemsPerPageMultiplier
         }
 
-        val isNeedToLoadMore = (firstVisibleItemPosition + visibleItemCount >= (totalItemCount - callback.itemsPerPage * pagesThreshold) && firstVisibleItemPosition >= 0)
+        val isNeedToLoadMore =
+            (firstVisibleItemPosition + visibleItemCount >= (totalItemCount - callback.itemsPerPage * pagesThreshold) && firstVisibleItemPosition >= 0)
         if (isNeedToLoadMore && !callback.isLastPage && !callback.isPaginationInProcess) {
             callback.loadMoreItems()
         }
