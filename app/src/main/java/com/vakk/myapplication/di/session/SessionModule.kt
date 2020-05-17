@@ -78,7 +78,7 @@ abstract class SessionModule {
         @SessionScope
         @Provides
         fun pokeApiDatasource(apiService: PokemonsApiService): PokeApiDatasource {
-            return PokeApiDatasource(apiService, Dispatchers.IO)
+            return PokeApiDatasource(apiService)
         }
     }
 }

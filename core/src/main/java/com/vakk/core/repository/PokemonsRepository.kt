@@ -4,6 +4,7 @@ import com.vakk.domain.entity.Pokemon
 import com.vakk.network.common.extensions.getResultOrThrowError
 import com.vakk.network.datasource.PokeApiDatasource
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
@@ -22,14 +23,13 @@ class PokemonsRepositoryImpl(
                 limit = take,
                 offset = skip
             ).getResultOrThrowError()
-            val pokemons =
-                bean.results.mapNotNull {
-                    it.url?.let {
-                        async {
-                            datasource.getPokemonProto(it)
-                        }
+            val pokemons = bean.results.mapNotNull {
+                it.url?.let {
+                    async(Dispatchers.Default) {
+                        datasource.getPokemonProto(it)
                     }
                 }
+            }
             pokemons.map {
                 val bean = it.await().getResultOrThrowError()
                 Pokemon(
@@ -38,5 +38,4 @@ class PokemonsRepositoryImpl(
                 )
             }
         }
-
 }
