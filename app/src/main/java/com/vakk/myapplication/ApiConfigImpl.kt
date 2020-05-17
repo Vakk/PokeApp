@@ -2,10 +2,10 @@ package com.vakk.myapplication
 
 import com.vakk.core.ApiConfig
 
-class ApiConfigImpl: ApiConfig {
+class ApiConfigImpl : ApiConfig {
     override val urlModel = UrlModelImpl()
 
-    class UrlModelImpl: ApiConfig.UrlModel {
+    class UrlModelImpl : ApiConfig.UrlModel {
         override val baseApi: String = "https://pokeapi.co/api/"
     }
 }

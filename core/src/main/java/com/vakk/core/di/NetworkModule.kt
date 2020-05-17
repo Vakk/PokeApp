@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.vakk.core.ApiConfig
+import com.vakk.core.BuildConfig
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -52,6 +54,13 @@ class NetworkModule {
     fun provideOkHttpClienBuilder(): OkHttpClient.Builder {
         return OkHttpClient
             .Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor.Level.NONE
+                } else {
+                    HttpLoggingInterceptor.Level.BODY
+                }
+            })
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)

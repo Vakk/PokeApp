@@ -22,7 +22,14 @@ class PokemonsRepositoryImpl(
                 limit = take,
                 offset = skip
             ).getResultOrThrowError()
-            val pokemons = bean.results.map { async { datasource.getPokemonProto(it.url) } }
+            val pokemons =
+                bean.results.mapNotNull {
+                    it.url?.let {
+                        async {
+                            datasource.getPokemonProto(it)
+                        }
+                    }
+                }
             pokemons.map {
                 val bean = it.await().getResultOrThrowError()
                 Pokemon(
