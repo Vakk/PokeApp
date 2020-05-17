@@ -26,7 +26,13 @@ class PokemonsAdapter(
     var isProgress: Boolean = false
         set(value) {
             field = value
-            notifyDataSetChanged()
+            if (value != field) {
+                if (value) {
+                    notifyItemInserted(all.size)
+                } else {
+                    notifyItemRemoved(all.size)
+                }
+            }
         }
 
     override fun getItemCount(): Int {
