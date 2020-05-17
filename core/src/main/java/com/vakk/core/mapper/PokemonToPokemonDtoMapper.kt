@@ -4,12 +4,12 @@ import com.vakk.PokemonDto
 import com.vakk.domain.entity.Pokemon
 import javax.inject.Inject
 
-class PokemonDtoToPokemonMapper @Inject constructor() {
-    operator fun invoke(pokemon: PokemonDto): Pokemon {
-        return Pokemon(
+class PokemonToPokemonDtoMapper @Inject constructor() {
+    operator fun invoke(pokemon: Pokemon): PokemonDto {
+        return PokemonDto(
             id = pokemon.id,
             name = pokemon.name,
-            iconUrl = pokemon.imageUrl
+            imageUrl = pokemon.iconUrl
         )
     }
 }

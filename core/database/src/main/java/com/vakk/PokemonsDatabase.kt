@@ -3,15 +3,15 @@ package com.vakk
 class PokemonsDatabase(
     val pokemonsDao: PokemonsDao
 ) {
-    fun getPokemons(
+    fun getAll(
         skip: Int,
         take: Int
     ): List<PokemonDto> {
         return pokemonsDao.getAll(skip, take)
     }
 
-    fun savePokemons(pokemons: List<PokemonDto>) {
-        pokemonsDao.replaceAll(pokemons)
+    fun insertAll(pokemons: List<PokemonDto>) {
+        pokemonsDao.insertAll(pokemons)
     }
 
     fun deleteAll() {

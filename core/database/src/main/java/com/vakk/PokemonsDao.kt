@@ -11,7 +11,7 @@ interface PokemonsDao {
     fun getAll(skip: Int, take: Int): List<PokemonDto>
 
     @Insert(entity = PokemonDto::class, onConflict = OnConflictStrategy.REPLACE)
-    fun replaceAll(entities: List<PokemonDto>)
+    fun insertAll(entities: List<PokemonDto>)
 
     @Insert(entity = PokemonDto::class, onConflict = OnConflictStrategy.REPLACE)
     fun replace(entities: PokemonDto)
