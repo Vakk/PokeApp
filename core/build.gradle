@@ -10,6 +10,7 @@ dependencies {
     api project(path: ':common')
     api project(path: ':domain')
     api project(path: ':core:network')
+    api project(path: ':core:database')
     api project(path: ':starter')
 
     api "com.squareup.retrofit2:converter-jackson:$retrofit_version"

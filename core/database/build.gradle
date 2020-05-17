@@ -4,6 +4,7 @@ apply from: "$rootProject.projectDir/gradle/coroutines.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.room:room-ktx:$room_version"
 
     testImplementation "junit:junit:$jUnit_version"
 }
