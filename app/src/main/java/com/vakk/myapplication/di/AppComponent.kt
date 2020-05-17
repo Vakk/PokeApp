@@ -1,6 +1,5 @@
 package com.vakk.myapplication.di
 
-import android.app.Application
 import android.content.Context
 import com.vakk.core.di.NetworkModule
 import com.vakk.myapplication.App

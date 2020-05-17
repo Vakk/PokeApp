@@ -4,8 +4,10 @@ apply from: "$rootProject.projectDir/gradle/coroutines.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-}
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    api "com.squareup.retrofit2:retrofit:$retrofit_version"
+    api "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    testImplementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation "junit:junit:$jUnit_version"
 }

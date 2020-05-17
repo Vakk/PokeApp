@@ -32,6 +32,10 @@ class PokemonsListFragment : BaseFragment<PokemonsListViewModel>(
                 )
             )
         })
+
+        viewModel.onItemsLoading.observe(Observer {
+            adapter.isProgress = it
+        })
     }
 
     override fun onClick(item: Pokemon, view: View) {
@@ -44,6 +48,11 @@ class PokemonsListFragment : BaseFragment<PokemonsListViewModel>(
             StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL).apply {
                 gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
             }
-//        rvItems.addOnScrollListener(PaginationScrollListener(viewModel))
+        rvItems.addOnScrollListener(
+            PaginationScrollListener(
+                viewModel,
+                pagesThreshold = 0
+            )
+        )
     }
 }
