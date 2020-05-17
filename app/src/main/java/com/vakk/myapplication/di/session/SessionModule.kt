@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.room.Room
 import com.vakk.PokemonsDao
 import com.vakk.PokemonsDatabase
-import com.vakk.core.mapper.PokemonDtoToPokemonMapper
-import com.vakk.core.mapper.PokemonToPokemonDtoMapper
+import com.vakk.core.mapper.GetPokemonInfoBeanListToPokemonDtoMapper
 import com.vakk.core.repository.PokemonsRepository
-import com.vakk.core.repository.PokemonsRepositoryImpl
 import com.vakk.core.usecase.GetPokemonsUseCaseImpl
 import com.vakk.domain.usecase.GetPokemonsUseCase
 import com.vakk.myapplication.database.AppDatabase
@@ -69,14 +67,12 @@ abstract class SessionModule {
         fun pokemonsRepository(
             datasource: PokeApiDatasource,
             database: PokemonsDatabase,
-            pokemonDtoToPokemonMapper: PokemonDtoToPokemonMapper,
-            pokemonToPokemonDtoMapper: PokemonToPokemonDtoMapper
-        ): PokemonsRepository = PokemonsRepositoryImpl(
+            getPokemonInfoBeanListToPokemonDtoMapper: GetPokemonInfoBeanListToPokemonDtoMapper
+        ): PokemonsRepository = PokemonsRepository(
             datasource = datasource,
             dispatcher = Dispatchers.Default,
             database = database,
-            pokemonDtoToPokemonMapper = pokemonDtoToPokemonMapper,
-            pokemonToPokemonDtoMapper = pokemonToPokemonDtoMapper
+            getPokemonInfoBeanListToPokemonDtoMapper = getPokemonInfoBeanListToPokemonDtoMapper
         )
 
         @SessionScope
