@@ -18,9 +18,8 @@ class App : Application(), HasAndroidInjector {
         super.onCreate()
         DaggerAppComponent
             .factory()
-            .create(this).apply {
-                inject(this@App)
-            }
+            .create(this)
+            .inject(this)
     }
 
 }

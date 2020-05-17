@@ -1,0 +1,8 @@
+apply plugin: 'com.android.library'
+
+apply from: "$rootProject.projectDir/gradle/poke_app.gradle"
+apply from: "$rootProject.projectDir/gradle/coroutines.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}

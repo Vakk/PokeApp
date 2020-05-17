@@ -3,14 +3,17 @@ package com.vakk.myapplication.di
 import android.app.Application
 import android.content.Context
 import com.vakk.core.di.NetworkModule
+import com.vakk.myapplication.App
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
+import javax.inject.Singleton
 
 /**
  * This is the core component of DI. Subcomponents will be created from AppModule using
  * ContributesAndroidInjector and scoped modules.
  */
+@Singleton
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
@@ -20,7 +23,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 )
 interface AppComponent {
 
-    fun inject(application: Application)
+    fun inject(application: App)
 
     @Component.Factory
     interface Factory {
