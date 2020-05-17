@@ -3,9 +3,8 @@ package com.vakk.myapplication.di.session
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
-import com.vakk.PokemonsDao
-import com.vakk.PokemonsDatabase
 import com.vakk.core.mapper.GetPokemonInfoBeanListToPokemonDtoMapper
+import com.vakk.core.repository.PokemonSpritesRepository
 import com.vakk.core.repository.PokemonsRepository
 import com.vakk.core.usecase.GetPokemonsUseCaseImpl
 import com.vakk.domain.usecase.GetPokemonsUseCase
@@ -15,6 +14,8 @@ import com.vakk.myapplication.ui.pokemons.PokemonsListFragment
 import com.vakk.myapplication.ui.pokemons.PokemonsListViewModel
 import com.vakk.network.datasource.PokeApiDatasource
 import com.vakk.network.service.PokemonsApiService
+import com.vakk.pokemon_details.PokemonDetailsDao
+import com.vakk.sprites.SpritesDao
 import com.vakk.starter.di.mvvm.ViewModelKey
 import dagger.Binds
 import dagger.Module
@@ -66,25 +67,33 @@ abstract class SessionModule {
         @Provides
         fun pokemonsRepository(
             datasource: PokeApiDatasource,
-            database: PokemonsDatabase,
+            pokemonDetailsDao: PokemonDetailsDao,
             getPokemonInfoBeanListToPokemonDtoMapper: GetPokemonInfoBeanListToPokemonDtoMapper
         ): PokemonsRepository = PokemonsRepository(
             datasource = datasource,
             dispatcher = Dispatchers.Default,
-            database = database,
+            database = pokemonDetailsDao,
             getPokemonInfoBeanListToPokemonDtoMapper = getPokemonInfoBeanListToPokemonDtoMapper
         )
 
         @SessionScope
         @Provides
-        fun pokemonsDataBase(pokemonsDao: PokemonsDao): PokemonsDatabase {
-            return PokemonsDatabase(pokemonsDao)
+        fun pokemonSpritesRepository(
+            spritesDao: SpritesDao
+        ): PokemonSpritesRepository {
+            return PokemonSpritesRepository(spritesDao)
         }
 
         @SessionScope
         @Provides
-        fun pokemonsDao(appDatabase: AppDatabase): PokemonsDao {
-            return appDatabase.pokemonsDao()
+        fun pokemonDetailsDao(appDatabase: AppDatabase): PokemonDetailsDao {
+            return appDatabase.pokemonDetailsDao()
+        }
+
+        @SessionScope
+        @Provides
+        fun spritesDao(appDatabase: AppDatabase): SpritesDao {
+            return appDatabase.spritesDao()
         }
 
         @SessionScope

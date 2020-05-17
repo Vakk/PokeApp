@@ -1,10 +1,10 @@
-package com.vakk
+package com.vakk.pokemon_details
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class PokemonDto(
+class PokemonDetailsDto(
     @PrimaryKey
     var id: Long,
     var name: String,

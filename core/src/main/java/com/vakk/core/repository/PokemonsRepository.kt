@@ -1,16 +1,16 @@
 package com.vakk.core.repository
 
-import com.vakk.PokemonsDatabase
 import com.vakk.core.mapper.GetPokemonInfoBeanListToPokemonDtoMapper
 import com.vakk.network.common.extensions.getResultOrThrowError
 import com.vakk.network.datasource.PokeApiDatasource
+import com.vakk.pokemon_details.PokemonDetailsDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class PokemonsRepository(
-    private val database: PokemonsDatabase,
+    private val database: PokemonDetailsDao,
     private val datasource: PokeApiDatasource,
     private val dispatcher: CoroutineDispatcher,
     private val getPokemonInfoBeanListToPokemonDtoMapper: GetPokemonInfoBeanListToPokemonDtoMapper
