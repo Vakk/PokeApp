@@ -30,6 +30,25 @@ class GetPokemonsUseCaseImpl @Inject constructor(
         }
     }
 
+    override suspend fun invoke(searchQuery: String, skip: Int, take: Int): List<Pokemon> {
+        if (searchQuery.isEmpty()) {
+            return invoke(skip, take)
+        }
+        // checking cache, if it doesn't have required items - load from remote datasource.
+        val localItems = pokemonsRepository.getLocalData(searchQuery, skip, take)
+        return if (localItems.size < take) {
+            fetchRemoteData(skip, take)
+            // we've fetched data, so try to load items from DB.
+            pokemonDtoToPokemonMapper(pokemonsRepository.getLocalData(searchQuery, skip, take))
+        } else {
+            pokemonDtoToPokemonMapper(localItems)
+        }.apply {
+            forEach {
+                it.iconUrl = spritesRepository.getByPokemonId(it.id)?.frontDefault ?: ""
+            }
+        }
+    }
+
     private suspend fun fetchRemoteData(skip: Int, take: Int) {
         val beans = pokemonsRepository.fetchRemoteData(skip, take)
         val sprites = beans.mapNotNull { spriteBeanToSpriteDtoMapper(it.id, it.sprites) }

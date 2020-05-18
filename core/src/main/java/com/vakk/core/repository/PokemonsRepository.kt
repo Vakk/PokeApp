@@ -45,4 +45,8 @@ class PokemonsRepository(
     suspend fun getLocalData(skip: Int, take: Int) = withContext(dispatcher) {
         database.getAll(skip = skip, take = take)
     }
+
+    suspend fun getLocalData(searchQuery: String, skip: Int, take: Int) = withContext(dispatcher) {
+        database.search("%$searchQuery%", skip = skip, take = take)
+    }
 }

@@ -9,6 +9,8 @@ import com.vakk.common.launchSafe
 import com.vakk.domain.entity.Pokemon
 import com.vakk.domain.usecase.GetPokemonsUseCase
 import com.vakk.starter.utils.PaginationCallback
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class PokemonsListViewModel @Inject constructor(
@@ -30,23 +32,46 @@ class PokemonsListViewModel @Inject constructor(
         }
     override var itemsPerPage: Int = 20
 
-    val items = mutableListOf<Pokemon>()
+    var searchQuery: String = ""
+
+    var items = mutableListOf<Pokemon>()
+
+    var searchJob: Job? = null
+    var loadingJob: Job? = null
 
     init {
         loadMoreItems()
     }
 
     override fun loadMoreItems() {
+        if (loadingJob?.isCompleted == false) {
+            return
+        }
         isPaginationInProcess = true
         val take = itemsPerPage
-        viewModelScope.launchSafe(onComplete = {
+        loadingJob = viewModelScope.launchSafe(onComplete = {
             isPaginationInProcess = false
         }) {
             val skip = items.size
-            val pokemons = getPokemonsUseCase(skip = skip, take = take)
+            val pokemons = getPokemonsUseCase(searchQuery, skip = skip, take = take)
             items.addAll(pokemons)
-            isLastPage = pokemons.size != take
+            isLastPage = pokemons.isEmpty()
             onPokemonsLoaded.value = items
+        }
+    }
+
+    fun search(newText: String?) {
+        searchQuery = newText ?: ""
+        if (searchJob == null || searchJob?.isCompleted == true) {
+            searchJob = viewModelScope.launchSafe {
+                delay(500)
+                loadingJob?.cancel()
+                loadingJob = null
+                isLastPage = false
+                isPaginationInProcess = false
+                items = mutableListOf()
+                loadMoreItems()
+            }
         }
     }
 
