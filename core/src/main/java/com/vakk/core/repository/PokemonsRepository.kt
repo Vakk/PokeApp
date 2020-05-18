@@ -1,53 +1,26 @@
 package com.vakk.core.repository
 
-import com.vakk.PokemonDto
-import com.vakk.PokemonsDatabase
-import com.vakk.core.mapper.PokemonDtoToPokemonMapper
-import com.vakk.core.mapper.PokemonToPokemonDtoMapper
-import com.vakk.domain.entity.Pokemon
+import com.vakk.core.mapper.GetPokemonInfoBeanListToPokemonDtoMapper
 import com.vakk.network.common.extensions.getResultOrThrowError
 import com.vakk.network.datasource.PokeApiDatasource
+import com.vakk.pokemon_details.PokemonDetailsDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
-interface PokemonsRepository {
-    suspend fun getPokemons(skip: Int, take: Int): List<Pokemon>
-}
-
-class PokemonsRepositoryImpl(
-    private val database: PokemonsDatabase,
+class PokemonsRepository(
+    private val database: PokemonDetailsDao,
     private val datasource: PokeApiDatasource,
     private val dispatcher: CoroutineDispatcher,
-    private val pokemonDtoToPokemonMapper: PokemonDtoToPokemonMapper,
-    private val pokemonToPokemonDtoMapper: PokemonToPokemonDtoMapper
-) : PokemonsRepository {
+    private val getPokemonInfoBeanListToPokemonDtoMapper: GetPokemonInfoBeanListToPokemonDtoMapper
+) {
 
-    override suspend fun getPokemons(skip: Int, take: Int): List<Pokemon> =
-        withContext(dispatcher) {
-            // Try to load cached items.
-            val localData = getCacheItems(skip, take)
-            if (localData.size >= take) {
-                return@withContext localData.map { pokemonDtoToPokemonMapper(it) }
-            }
-
-            // In case of db items list is smaller than take value - we should load it from API.
-            getApiItems(skip, take).apply {
-                map {
-                    pokemonToPokemonDtoMapper(it)
-                }.let {
-                    database.insertAll(it) // save into cache to faster access next time.
-                }
-            }
-
-        }
-
-    private fun getCacheItems(skip: Int, take: Int): List<PokemonDto> {
-        return database.getAll(skip = skip, take = take)
+    suspend fun getById(id: Long) = withContext(dispatcher) {
+        database.getItemById(id)
     }
 
-    private suspend fun getApiItems(skip: Int, take: Int) = withContext(dispatcher) {
+    suspend fun fetchRemoteData(skip: Int, take: Int) = withContext(dispatcher) {
         val bean = datasource.getPokemonsProtoList(
             limit = take,
             offset = skip
@@ -60,13 +33,16 @@ class PokemonsRepositoryImpl(
                 }
             }
         }
-        pokemons.map {
-            val bean = it.await().getResultOrThrowError()
-            Pokemon(
-                id = bean.id,
-                name = bean.name,
-                iconUrl = bean.sprites.frontDefault ?: ""
-            )
+        val result = pokemons.map {
+            it.await().getResultOrThrowError()
         }
+        getPokemonInfoBeanListToPokemonDtoMapper.invoke(result).apply {
+            database.insertAll(this)
+        }
+        result
+    }
+
+    suspend fun getLocalData(skip: Int, take: Int) = withContext(dispatcher) {
+        database.getAll(skip = skip, take = take)
     }
 }

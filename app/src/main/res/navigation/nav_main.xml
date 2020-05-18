@@ -10,6 +10,17 @@
         android:name="com.vakk.myapplication.ui.pokemons.PokemonsListFragment"
         tools:layout="@layout/fragment_pokemons">
 
+        <action
+            android:id="@+id/action_fragmentPokemonsList_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.vakk.myapplication.ui.details.DetailsFragment"
+        tools:layout="@layout/fragment_pokemon_details">
+
+
     </fragment>
 
 </navigation>

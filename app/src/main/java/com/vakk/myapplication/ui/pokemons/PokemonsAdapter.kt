@@ -65,7 +65,13 @@ class PokemonsAdapter(
         val ivIcon = itemView.findViewById<ImageView>(R.id.ivIcon)
         val tvName = itemView.findViewById<TextView>(R.id.tvName)
 
+        init {
+            setClickListeners(itemView)
+        }
+
         override fun onBind(item: Pokemon) {
+            tvName.transitionName = "title_${item.id}"
+            ivIcon.transitionName = "icon_${item.id}"
             tvName.text = item.name
             ivIcon.loadImage(item.iconUrl)
         }
