@@ -13,6 +13,9 @@ interface PokemonDetailsDao {
     @Query("SELECT * FROM PokemonDetailsDto LIMIT :take OFFSET :skip")
     fun getAll(skip: Int, take: Int): List<PokemonDetailsDto>
 
+    @Query("SELECT * FROM PokemonDetailsDto where name like :searchQuery LIMIT :take OFFSET :skip")
+    fun search(searchQuery: String, skip: Int, take: Int): List<PokemonDetailsDto>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(entities: List<PokemonDetailsDto>)
 

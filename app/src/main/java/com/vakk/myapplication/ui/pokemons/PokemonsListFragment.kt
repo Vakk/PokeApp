@@ -1,14 +1,12 @@
 package com.vakk.myapplication.ui.pokemons
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import androidx.transition.ChangeBounds
 import com.vakk.domain.entity.Pokemon
 import com.vakk.myapplication.R
 import com.vakk.starter.ui.AdapterClickListener
@@ -23,6 +21,13 @@ class PokemonsListFragment : BaseFragment<PokemonsListViewModel>(
 ), AdapterClickListener<Pokemon> {
 
     val adapter by lazy { PokemonsAdapter(this) }
+
+    lateinit var searchView: SearchView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +52,11 @@ class PokemonsListFragment : BaseFragment<PokemonsListViewModel>(
                 )
             )
             startPostponedEnterTransition()
+            tvLimitedResults.visibility = if (viewModel.searchQuery.isNotEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         })
 
         viewModel.onItemsLoading.observe(Observer {
@@ -67,6 +77,22 @@ class PokemonsListFragment : BaseFragment<PokemonsListViewModel>(
             null,
             extras
         )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
+        searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.search(newText)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.search(query)
+                return true
+            }
+        })
     }
 
     private fun prepareListView() {
