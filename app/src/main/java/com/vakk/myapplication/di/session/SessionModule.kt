@@ -4,19 +4,29 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
 import com.vakk.core.mapper.GetPokemonInfoBeanListToPokemonDtoMapper
+import com.vakk.core.repository.LanguageRepository
 import com.vakk.core.repository.PokemonSpritesRepository
 import com.vakk.core.repository.PokemonsRepository
+import com.vakk.core.usecase.GetAvaialbleLanguagesUseCaseImpl
 import com.vakk.core.usecase.GetPokemonDetailsUseCaseImpl
 import com.vakk.core.usecase.GetPokemonsUseCaseImpl
+import com.vakk.core.usecase.SaveLanguageUseCaseImpl
+import com.vakk.domain.usecase.GetAvailableLanguagesUseCase
 import com.vakk.domain.usecase.GetPokemonDetailsUseCase
 import com.vakk.domain.usecase.GetPokemonsUseCase
+import com.vakk.domain.usecase.SaveLanguageUseCase
+import com.vakk.language.LanguageDao
 import com.vakk.myapplication.database.AppDatabase
 import com.vakk.myapplication.ui.details.DetailsFragment
 import com.vakk.myapplication.ui.details.DetailsViewModel
 import com.vakk.myapplication.ui.main.MainViewModel
 import com.vakk.myapplication.ui.pokemons.PokemonsListFragment
 import com.vakk.myapplication.ui.pokemons.PokemonsListViewModel
+import com.vakk.myapplication.ui.settings.SettingsFragment
+import com.vakk.myapplication.ui.settings.SettingsViewModel
+import com.vakk.network.datasource.LanguagesDataSource
 import com.vakk.network.datasource.PokeApiDatasource
+import com.vakk.network.service.LanguagesApiService
 import com.vakk.network.service.PokemonsApiService
 import com.vakk.pokemon_details.PokemonDetailsDao
 import com.vakk.sprites.SpritesDao
@@ -48,6 +58,9 @@ abstract class SessionModule {
     @ContributesAndroidInjector
     abstract fun detailsFragment(): DetailsFragment
 
+    @ContributesAndroidInjector
+    abstract fun settingsFragment(): SettingsFragment
+
     @Module
     abstract class ViewModelModule {
         @Binds
@@ -64,6 +77,11 @@ abstract class SessionModule {
         @IntoMap
         @ViewModelKey(DetailsViewModel::class)
         abstract fun detailsViewModel(viewModel: DetailsViewModel): ViewModel
+
+        @Binds
+        @IntoMap
+        @ViewModelKey(SettingsViewModel::class)
+        abstract fun settingsViewModel(viewModel: SettingsViewModel): ViewModel
     }
 
     @Module
@@ -75,6 +93,15 @@ abstract class SessionModule {
         @SessionScope
         @Binds
         abstract fun getPokemonDetailsUseCase(useCase: GetPokemonDetailsUseCaseImpl): GetPokemonDetailsUseCase
+
+        @SessionScope
+        @Binds
+        abstract fun saveLanguageUseCase(useCase: SaveLanguageUseCaseImpl): SaveLanguageUseCase
+
+        @SessionScope
+        @Binds
+        abstract fun getAvaialbleLanguagesUseCaseImpl(useCase: GetAvaialbleLanguagesUseCaseImpl): GetAvailableLanguagesUseCase
+
     }
 
     @Module
@@ -102,6 +129,18 @@ abstract class SessionModule {
 
         @SessionScope
         @Provides
+        fun languageRepository(
+            languagesDataSource: LanguagesDataSource,
+            languageDao: LanguageDao
+        ): LanguageRepository {
+            return LanguageRepository(
+                languagesDataSource,
+                languageDao = languageDao
+            )
+        }
+
+        @SessionScope
+        @Provides
         fun pokemonDetailsDao(appDatabase: AppDatabase): PokemonDetailsDao {
             return appDatabase.pokemonDetailsDao()
         }
@@ -110,6 +149,12 @@ abstract class SessionModule {
         @Provides
         fun spritesDao(appDatabase: AppDatabase): SpritesDao {
             return appDatabase.spritesDao()
+        }
+
+        @SessionScope
+        @Provides
+        fun languagesDao(appDatabase: AppDatabase): LanguageDao {
+            return appDatabase.languageDao()
         }
 
         @SessionScope
@@ -133,8 +178,20 @@ abstract class SessionModule {
 
         @SessionScope
         @Provides
+        fun languagesApiService(retrofit: Retrofit): LanguagesApiService {
+            return retrofit.create(LanguagesApiService::class.java)
+        }
+
+        @SessionScope
+        @Provides
         fun pokeApiDatasource(apiService: PokemonsApiService): PokeApiDatasource {
             return PokeApiDatasource(apiService)
+        }
+
+        @SessionScope
+        @Provides
+        fun languagesDataSource(apiService: LanguagesApiService): LanguagesDataSource {
+            return LanguagesDataSource(apiService)
         }
     }
 }

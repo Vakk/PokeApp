@@ -95,6 +95,15 @@ class PokemonsListFragment : BaseFragment<PokemonsListViewModel>(
         })
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.settings -> findNavController().navigate(
+                R.id.action_fragmentPokemonsList_to_settingsFragment
+            )
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun prepareListView() {
         rvItems.adapter = adapter
         rvItems.layoutManager =
