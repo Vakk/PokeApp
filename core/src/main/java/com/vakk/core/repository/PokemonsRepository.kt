@@ -16,6 +16,10 @@ class PokemonsRepository(
     private val getPokemonInfoBeanListToPokemonDtoMapper: GetPokemonInfoBeanListToPokemonDtoMapper
 ) {
 
+    suspend fun getById(id: Long) = withContext(dispatcher) {
+        database.getItemById(id)
+    }
+
     suspend fun fetchRemoteData(skip: Int, take: Int) = withContext(dispatcher) {
         val bean = datasource.getPokemonsProtoList(
             limit = take,

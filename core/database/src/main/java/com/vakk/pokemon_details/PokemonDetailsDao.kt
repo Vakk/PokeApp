@@ -7,6 +7,9 @@ import androidx.room.Query
 
 @Dao
 interface PokemonDetailsDao {
+    @Query("SELECT * FROM PokemonDetailsDto where id == :id")
+    fun getItemById(id: Long): PokemonDetailsDto?
+
     @Query("SELECT * FROM PokemonDetailsDto LIMIT :take OFFSET :skip")
     fun getAll(skip: Int, take: Int): List<PokemonDetailsDto>
 

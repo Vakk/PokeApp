@@ -29,28 +29,24 @@ abstract class BaseFragment<VM : ViewModel>(
 
     private var liveDataList = mutableListOf<LiveData<*>>()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        prepareViewModelObservers()
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = initializeViewModel(viewModelClass)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         liveDataList = mutableListOf()
         prepareViewModelObservers()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onDestroyView() {
+        super.onDestroyView()
         val oldLiveData = liveDataList.toList()
         val lifecycleOwner = this
         // Creation of new thread will speed up fragment recreation (f.e when user did rotation).
         Thread { oldLiveData.forEach { it.removeObservers(lifecycleOwner) } }.run()
+
     }
 
     override fun onCreateView(

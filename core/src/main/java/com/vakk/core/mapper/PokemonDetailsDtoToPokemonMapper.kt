@@ -19,4 +19,15 @@ class PokemonDetailsDtoToPokemonMapper @Inject constructor(
             )
         }
     }
+
+    suspend operator fun invoke(
+        detailDto: PokemonDetailsDto
+    ): Pokemon {
+        val sprites = spritesRepository.getByPokemonId(detailDto.id)
+        return Pokemon(
+            id = detailDto.id,
+            iconUrl = sprites?.frontDefault ?: "",
+            name = detailDto.name
+        )
+    }
 }

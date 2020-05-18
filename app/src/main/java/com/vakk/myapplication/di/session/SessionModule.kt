@@ -6,9 +6,13 @@ import androidx.room.Room
 import com.vakk.core.mapper.GetPokemonInfoBeanListToPokemonDtoMapper
 import com.vakk.core.repository.PokemonSpritesRepository
 import com.vakk.core.repository.PokemonsRepository
+import com.vakk.core.usecase.GetPokemonDetailsUseCaseImpl
 import com.vakk.core.usecase.GetPokemonsUseCaseImpl
+import com.vakk.domain.usecase.GetPokemonDetailsUseCase
 import com.vakk.domain.usecase.GetPokemonsUseCase
 import com.vakk.myapplication.database.AppDatabase
+import com.vakk.myapplication.ui.details.DetailsFragment
+import com.vakk.myapplication.ui.details.DetailsViewModel
 import com.vakk.myapplication.ui.main.MainViewModel
 import com.vakk.myapplication.ui.pokemons.PokemonsListFragment
 import com.vakk.myapplication.ui.pokemons.PokemonsListViewModel
@@ -41,6 +45,9 @@ abstract class SessionModule {
     @ContributesAndroidInjector
     abstract fun pokemonsListFragment(): PokemonsListFragment
 
+    @ContributesAndroidInjector
+    abstract fun detailsFragment(): DetailsFragment
+
     @Module
     abstract class ViewModelModule {
         @Binds
@@ -52,6 +59,11 @@ abstract class SessionModule {
         @IntoMap
         @ViewModelKey(PokemonsListViewModel::class)
         abstract fun pokemonsListViewModel(viewModel: PokemonsListViewModel): ViewModel
+
+        @Binds
+        @IntoMap
+        @ViewModelKey(DetailsViewModel::class)
+        abstract fun detailsViewModel(viewModel: DetailsViewModel): ViewModel
     }
 
     @Module
@@ -59,6 +71,10 @@ abstract class SessionModule {
         @SessionScope
         @Binds
         abstract fun getPokemonsUseCase(useCase: GetPokemonsUseCaseImpl): GetPokemonsUseCase
+
+        @SessionScope
+        @Binds
+        abstract fun getPokemonDetailsUseCase(useCase: GetPokemonDetailsUseCaseImpl): GetPokemonDetailsUseCase
     }
 
     @Module
