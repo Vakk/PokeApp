@@ -52,6 +52,11 @@ class PokemonsListFragment : BaseFragment<PokemonsListViewModel>(
                 )
             )
             startPostponedEnterTransition()
+            tvLimitedResults.visibility = if (viewModel.searchQuery.isNotEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         })
 
         viewModel.onItemsLoading.observe(Observer {
