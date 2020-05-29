@@ -24,6 +24,8 @@ import com.vakk.myapplication.ui.pokemons.PokemonsListFragment
 import com.vakk.myapplication.ui.pokemons.PokemonsListViewModel
 import com.vakk.myapplication.ui.settings.SettingsFragment
 import com.vakk.myapplication.ui.settings.SettingsViewModel
+import com.vakk.myapplication.ui.timer.TimerFragment
+import com.vakk.myapplication.ui.timer.TimerViewModel
 import com.vakk.network.datasource.LanguagesDataSource
 import com.vakk.network.datasource.PokeApiDatasource
 import com.vakk.network.service.LanguagesApiService
@@ -61,6 +63,9 @@ abstract class SessionModule {
     @ContributesAndroidInjector
     abstract fun settingsFragment(): SettingsFragment
 
+    @ContributesAndroidInjector
+    abstract fun timerFragment(): TimerFragment
+
     @Module
     abstract class ViewModelModule {
         @Binds
@@ -82,6 +87,11 @@ abstract class SessionModule {
         @IntoMap
         @ViewModelKey(SettingsViewModel::class)
         abstract fun settingsViewModel(viewModel: SettingsViewModel): ViewModel
+
+        @Binds
+        @IntoMap
+        @ViewModelKey(TimerViewModel::class)
+        abstract fun timerViewModel(viewModel: TimerViewModel): ViewModel
     }
 
     @Module
