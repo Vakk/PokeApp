@@ -34,14 +34,14 @@ abstract class BaseFragment<VM : ViewModel>(
         viewModel = initializeViewModel(viewModelClass)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         liveDataList = mutableListOf()
         prepareViewModelObservers()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onDestroyView() {
+        super.onDestroyView()
         val oldLiveData = liveDataList.toList()
         val lifecycleOwner = this
         // Creation of new thread will speed up fragment recreation (f.e when user did rotation).

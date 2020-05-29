@@ -31,6 +31,7 @@ class TestService : Service() {
             Notification.Builder(this)
         }.let {
             it.setContentTitle("Timer title.")
+            it.setSubText("Sub text")
             it.setContentText("Timer was started.")
             it.build()
         }
