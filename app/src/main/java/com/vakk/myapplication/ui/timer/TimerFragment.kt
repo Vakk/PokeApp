@@ -21,7 +21,7 @@ class TimerFragment : BaseFragment<TimerViewModel>(
     viewModelClass = TimerViewModel::class.java,
     layoutId = R.layout.fragment_timer
 ) {
-    private var binder: CustomTimerAidlService.Stub? = null
+    private var binder: CustomTimerAidlService? = null
 
     private var serviceConnection: ServiceConnection? = null
 
@@ -57,7 +57,7 @@ class TimerFragment : BaseFragment<TimerViewModel>(
 
     private fun initServiceConnection() = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            binder = service?.cast()
+            binder = CustomTimerAidlService.Stub.asInterface(service)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {

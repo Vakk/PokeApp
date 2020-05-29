@@ -4,8 +4,10 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.vakk.common.cast
 
 class TestService : Service() {
 
@@ -18,8 +20,11 @@ class TestService : Service() {
 
     private var startTime = currentTime
 
+    private lateinit var notificationManager: NotificationManager
+
     override fun onCreate() {
         super.onCreate()
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)!!.cast()
         startForeground(25, prepareNotification())
     }
 
@@ -30,10 +35,13 @@ class TestService : Service() {
         } else {
             Notification.Builder(this)
         }.let {
+            it.setSmallIcon(R.mipmap.ic_launcher_round)
             it.setContentTitle("Timer title.")
             it.setSubText("Sub text")
             it.setContentText("Timer was started.")
             it.build()
+        }.apply {
+            notificationManager.notify(25, this)
         }
     }
 
